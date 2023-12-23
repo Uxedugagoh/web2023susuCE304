@@ -67,7 +67,16 @@ function fibonacci(n) {
  * console.log(sumFn(5)) - 15
  * console.log(sumFn(3)) - 18
  */
-function getOperationFn(initialValue, operatorFn) {}
+function getOperationFn(initialValue, operatorFn) {
+    if (!operatorFn) {
+        return initialValue;
+    }
+    let storedValue = initialValue;
+    return (newValue) => {
+        storedValue = operatorFn(storedValue, newValue);
+        return storedValue;
+    };
+}
 
 /**
  * Напишите функцию создания генератора арифметической последовательности.
@@ -85,7 +94,13 @@ function getOperationFn(initialValue, operatorFn) {}
  * console.log(generator()); // 7
  * console.log(generator()); // 9
  */
-function sequence(start, step) {}
+function sequence(start = 0, step = 1) {
+    return function generator() {
+        const currentValue = start;
+        start += step;
+        return currentValue;
+    };
+}
 
 /**
  * Напишите функцию deepEqual, которая принимает два значения
@@ -101,7 +116,28 @@ function sequence(start, step) {}
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 33], text: 'text'}) // true
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 3], text: 'text2'}) // false
  */
-function deepEqual(firstObject, secondObject) {}
+function deepEqual(firstObject, secondObject) {
+    if (firstObject === secondObject) {
+        return true;
+    }
+
+    const keysFirst = Object.keys(firstObject);
+    const keysSecond = Object.keys(secondObject);
+
+    if (keysFirst.length !== keysSecond.length) {
+        return false;
+    }
+
+    for (let key of keysFirst) {
+        if (!keysSecond.includes(key)) {
+            return false;
+        }
+        if (!deepEqual(firstObject[key], secondObject[key])) {
+            return false;
+        }
+    }
+    return true;
+}
 
 module.exports = {
     isInteger,
